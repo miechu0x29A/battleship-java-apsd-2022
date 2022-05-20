@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameController {
-    public static boolean checkIsHit(Collection<Ship> ships, Position shot) {
+    public static Ship checkIsHit(Collection<Ship> ships, Position shot) {
         if (ships == null) {
             throw new IllegalArgumentException("ships is null");
         }
@@ -24,12 +24,12 @@ public class GameController {
             for (Position position : ship.getPositions()) {
                 if (position.equals(shot)) {
                     position.setHitPosition(Boolean.TRUE);
-                    return true;
+                    return ship;
                 }
             }
         }
 
-        return false;
+        return null;
     }
 
     public static List<Ship> initializeShips() {

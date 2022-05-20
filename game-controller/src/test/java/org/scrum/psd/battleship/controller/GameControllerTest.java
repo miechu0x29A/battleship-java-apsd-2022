@@ -25,7 +25,8 @@ public class GameControllerTest {
             counter++;
         }
 
-        boolean result = GameController.checkIsHit(ships, new Position(Letter.A, 1));
+        final Ship ship = GameController.checkIsHit(ships, new Position(Letter.A, 1));
+        boolean result = ship != null;
 
         Assert.assertTrue(result);
     }
@@ -45,7 +46,8 @@ public class GameControllerTest {
             counter++;
         }
 
-        boolean result = GameController.checkIsHit(ships, new Position(Letter.H, 1));
+        final Ship ship = GameController.checkIsHit(ships, new Position(Letter.H, 1));
+        boolean result = ship != null;
 
         Assert.assertFalse(result);
     }

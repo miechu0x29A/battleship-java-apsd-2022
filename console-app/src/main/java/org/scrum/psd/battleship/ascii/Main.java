@@ -61,7 +61,8 @@ public class Main {
             System.out.println("Player, it's your turn");
             System.out.println("Enter coordinates for your shot :");
             Position position = parsePosition(scanner.next());
-            boolean isHit = GameController.checkIsHit(enemyFleet, position);
+            final Ship pcShip = GameController.checkIsHit(enemyFleet, position);
+            boolean isHit = pcShip != null;
             if (isHit) {
                 beep();
 
@@ -73,14 +74,29 @@ public class Main {
                 System.out.println("            -   (\\- |  \\ /  |  /)  -");
                 System.out.println("                 -\\  \\     /  /-");
                 System.out.println("                   \\  \\   /  /");
+
+                if (pcShip.isSunk()) {
+                    System.out.println("\n\n\n\n\nTRAFIONY ZATOPIONY\n\n\n\n\n");
+                }
+
+                Ship notSunkMyFleet = myFleet.stream().filter(e -> e.isSunk().equals(Boolean.FALSE)).findAny().orElse(null);
+
+                if (notSunkMyFleet == null) {
+                    System.out.println("\n\n\n\n\nPRZEGRYWASZ\n\n\n\n\n");
+
+                    System.exit(0);
+                }
+
             }
 
             System.out.println(isHit ? colorize("Yeah ! Nice hit !", YELLOW_TEXT()) : colorize("Miss", BLUE_TEXT()));
 
             position = getRandomPosition();
-            isHit = GameController.checkIsHit(myFleet, position);
+            final Ship userShip = GameController.checkIsHit(myFleet, position);
+            isHit = userShip != null;
             System.out.println("");
-            System.out.println(String.format(colorize("Computer shoot in %s%s and %s", CYAN_TEXT()), position.getColumn(), position.getRow(), isHit ? colorize("hit your ship !", YELLOW_TEXT()) : colorize("miss", BLUE_TEXT())));
+            System.out.println(String.format(colorize("Computer shoot in %s%s and %s", CYAN_TEXT()), position.getColumn(), position.getRow(),
+                    isHit ? colorize("hit your pcShip !", YELLOW_TEXT()) : colorize("miss", BLUE_TEXT())));
             if (isHit) {
                 beep();
 
@@ -93,14 +109,18 @@ public class Main {
                 System.out.println("                 -\\  \\     /  /-");
                 System.out.println("                   \\  \\   /  /");
 
+                if (userShip != null && userShip.isSunk()) {
+                    System.out.println("\n\n\n\n\nTRAFIONY ZATOPIONY\n\n\n\n\n");
+                }
             }
 
-            Ship notSunkEnemyShip =
-            enemyFleet
-                    .stream()
-                    .filter(e -> e.isSunk().equals(Boolean.FALSE))
-                    .findAny()
-                    .orElse(null);
+            Ship notSunkEnemyShip = enemyFleet.stream().filter(e -> e.isSunk().equals(Boolean.FALSE)).findAny().orElse(null);
+
+            if (notSunkEnemyShip == null) {
+                System.out.println("\n\n\n\n\nWYGRYWASZ\n\n\n\n\n");
+
+                System.exit(0);
+            }
 
             i++;
         } while (true);
